@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RepositoryLayer.Interfaces
+namespace BussinessLayer.Interfaces
 {
-    public interface IUserRL
+    public interface IUserBL
     {
         public void AddUser(UserPostModel userPostModel);
-        
+     
     }
 }
