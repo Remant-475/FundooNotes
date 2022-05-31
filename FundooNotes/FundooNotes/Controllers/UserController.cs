@@ -3,6 +3,7 @@ using DataBaseLayer.Users;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Services;
 using System;
+using System.Linq;
 
 namespace FundooNotes.Controllers
 {
@@ -33,5 +34,28 @@ namespace FundooNotes.Controllers
                 throw ex;
             }
         }
+        [HttpPost("Login/{Email}/{Password}")]
+
+        public ActionResult LoginUser(string Email, string Password)
+        {
+            try
+            {
+
+                var user = fundooContext.User.FirstOrDefault(u => u.Email == Email);
+                if (user == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Email does not Exist" });
+                }
+                string token = this.userBL.LoginUser(Email, Password);
+                return this.Ok(new { success = true, message = "Login Successful", token = token });
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
+

@@ -36,7 +36,8 @@ namespace FundooNotes
         {
             services.AddControllers();
             services.AddDbContext<FundooContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Constr")));
-            
+            services.AddTransient<IUserRL, UserRL>();
+            services.AddTransient<IUserBL, UserBL>();
             services.AddSwaggerGen(setup =>
             {
                 // Include 'SecurityScheme' to use JWT Authentication
@@ -64,8 +65,24 @@ namespace FundooNotes
                 });
 
             });
-            services.AddTransient<IUserRL, UserRL>();
-            services.AddTransient<IUserBL, UserBL>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+
+                };
+            });    
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
