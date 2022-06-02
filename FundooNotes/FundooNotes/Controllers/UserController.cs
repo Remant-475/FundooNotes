@@ -76,29 +76,7 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
-        [Authorize]
-        [HttpPut("ResetPassword")]
-        public ActionResult ResetPassword(PasswordModel passwordModel)
-        {
-            try
-            {
-                var currentUser = HttpContext.User;
-                int userId = Convert.ToInt32(currentUser.Claims.FirstOrDefault(c => c.Type == "userId").Value);
-                var email = (currentUser.Claims.FirstOrDefault(c => c.Type == "Email").Value);
-                if(passwordModel.NewPassword!=passwordModel.ConfirmPassword)
-                {
-                    return this.BadRequest(new { success = false, message = "Password and confirm password must be same" });
-                }
-                bool result = this.userBL.ResetPassword(email, passwordModel);
-                return this.Ok(new { success = true, message = "Password change Successfully" });
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+       
 
     }
    
