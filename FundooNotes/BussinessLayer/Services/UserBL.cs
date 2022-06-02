@@ -26,6 +26,20 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
+
+        public bool ForgetPassword(string Email)
+        {
+            try
+            {
+                return this.userRl.ForgetPassword(Email);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public string LoginUser(string Email, string Password)
         {
             try
@@ -39,6 +53,17 @@ namespace BussinessLayer.Services
             }
         }
 
+        public bool ResetPassword(string Email, PasswordModel passwordModel)
+        {
+            try
+            {
+                return this.userRl.ResetPassword(Email, passwordModel);
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+        }
     }
 }

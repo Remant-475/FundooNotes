@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+
+namespace RepositoryLayer.Services
+{
+    public class EmailService
+    {
+        public static void SendEmail(string Email,string token)
+        {
+            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
+            {
+                client.EnableSsl = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = true;
+                client.Credentials = new NetworkCredential("remapitesting963@gmail.com", "Remant@123");
+
+                MailMessage msgObj=new MailMessage();
+                msgObj.To.Add(Email);
+                msgObj.From = new MailAddress("remapitesting963@gmail.com");
+                msgObj.Subject = "Password Reset Link";
+                msgObj.Body= $"www.fundooNotes.com/reset-password/{token}";
+                client.Send(msgObj);
+            }
+        }
+    }
+}

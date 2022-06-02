@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Interfaces;
 using DataBaseLayer.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Services;
 using System;
@@ -56,6 +57,50 @@ namespace FundooNotes.Controllers
                 throw;
             }
         }
+        [HttpPost("ForgetPassword/{Email}")]
+        public ActionResult ForgetPassword(string Email)
+        {
+            try
+            {
+                var user = fundooContext.User.FirstOrDefault(u => u.Email == Email);
+                if (user == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Email does not Exist" });
+                }
+                bool result = this.userBL.ForgetPassword(Email);
+                return this.Ok(new { success = true, message = "Email has sent" });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpPut("ResetPassword")]
+        public ActionResult ResetPassword(PasswordModel passwordModel)
+        {
+            try
+            {
+                var currentUser = HttpContext.User;
+                int userId = Convert.ToInt32(currentUser.Claims.FirstOrDefault(c => c.Type == "userId").Value);
+                var email = (currentUser.Claims.FirstOrDefault(c => c.Type == "Email").Value);
+                if(passwordModel.NewPassword!=passwordModel.ConfirmPassword)
+                {
+                    return this.BadRequest(new { success = false, message = "Password and confirm password must be same" });
+                }
+                bool result = this.userBL.ResetPassword(email, passwordModel);
+                return this.Ok(new { success = true, message = "Password change Successfully" });
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
+   
 }
 
