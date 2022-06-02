@@ -194,6 +194,32 @@ namespace RepositoryLayer.Services
 
         }
 
-        
+        public bool ResetPassword(string Email, PasswordModel passwordModel)
+        {
+            try
+            {
+                var user = fundoocontext.User.FirstOrDefault(u => u.Email == Email);
+                if (user == null)
+                {
+                    return false;
+                }
+                if (passwordModel.NewPassword != passwordModel.ConfirmPassword)
+                {
+                    return false;
+                }
+                user.Password = Encryption.EncodePasswordToBase64(passwordModel.NewPassword);
+                fundoocontext.SaveChanges();
+                return true;
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }
