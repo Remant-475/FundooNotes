@@ -14,5 +14,6 @@ namespace BussinessLayer.Interfaces
         Task UpdateNote(int UserId, int NoteId, UpdateModel updateModel);
         Task<Note> GetNote(int UserId, int NoteId);
         Task PinNote(int UserId, int NoteId);
+        Task ArchiveNote(int UserId, int NoteId);
     }
 }

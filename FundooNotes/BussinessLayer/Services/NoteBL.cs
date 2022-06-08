@@ -70,5 +70,10 @@ namespace BussinessLayer.Services
         {
             await noteRL.PinNote(NoteId, UserId);
         }
+
+        public async Task ArchiveNote(int UserId, int NoteId)
+        {
+            await noteRL.ArchiveNote(NoteId, UserId);
+        }
     }
 }
