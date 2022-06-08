@@ -17,9 +17,9 @@ namespace RepositoryLayer.Services
     {
         FundooContext fundoocontext;
         IConfiguration configuration;
-        public UserRL(FundooContext fundooContext, IConfiguration configuration)
+        public UserRL(FundooContext fundoocontext, IConfiguration configuration)
         {
-            this.fundoocontext = fundooContext;
+            this.fundoocontext = fundoocontext;
             this.configuration = configuration;
         }
 
@@ -91,7 +91,7 @@ namespace RepositoryLayer.Services
                 messageQueue.Send(MyMessage);
                 Message msg = messageQueue.Receive();
                 msg.Formatter = new BinaryMessageFormatter();
-                EmailService.SendEmail(Email, msg.Body.ToString());
+                EmailService.SendEmail(Email, msg.Body.ToString(),fundoocontext);
                 messageQueue.ReceiveCompleted += new ReceiveCompletedEventHandler(msmqQueue_ReceiveCompleted);
 
                 messageQueue.BeginReceive();
@@ -115,7 +115,7 @@ namespace RepositoryLayer.Services
             {
                 MessageQueue queue = (MessageQueue)sender;
                 Message msg = queue.EndReceive(e.AsyncResult);
-                EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
+                EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()),fundoocontext);
                 queue.BeginReceive();
             }
             catch (MessageQueueException ex)

@@ -22,4 +22,4 @@ namespace DataBaseLayer.Users
         public string Password { get; set; }
         public string Address { get; set; }
     }
-}
+} 

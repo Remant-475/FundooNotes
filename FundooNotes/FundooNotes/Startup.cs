@@ -36,10 +36,7 @@ namespace FundooNotes
         {
             services.AddControllers();
             services.AddDbContext<FundooContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Constr")));
-            services.AddTransient<IUserRL, UserRL>();
-            services.AddTransient<IUserBL, UserBL>();
-            services.AddTransient<INoteRL, NoteRL>();
-            services.AddTransient<INoteBL, NoteBL>();
+           
             services.AddSwaggerGen(setup =>
             {
                 // Include 'SecurityScheme' to use JWT Authentication
@@ -83,7 +80,11 @@ namespace FundooNotes
                     ValidateAudience = false
 
                 };
-            });    
+            });
+            services.AddTransient<IUserRL, UserRL>();
+            services.AddTransient<IUserBL, UserBL>();
+            services.AddTransient<INoteRL, NoteRL>();
+            services.AddTransient<INoteBL, NoteBL>();
 
         }
 
