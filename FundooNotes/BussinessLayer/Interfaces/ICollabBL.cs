@@ -8,7 +8,7 @@ namespace BussinessLayer.Interfaces
     public interface ICollabBL
     {
         Task AddCollab(int UserId, int NoteId, string CollabEmail);
-       
+        Task RemoveCollab(int UserId, int NoteId);
 
     }
 }

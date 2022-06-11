@@ -9,6 +9,6 @@ namespace RepositoryLayer.Interfaces
     public interface ICollabRL
     {
         Task AddCollab(int UserId, int NoteId, string CollabEmail);
-       
+        Task RemoveCollab(int UserId, int NoteId);
     }
 }

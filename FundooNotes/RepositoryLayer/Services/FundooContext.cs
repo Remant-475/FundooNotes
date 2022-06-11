@@ -15,6 +15,8 @@ namespace RepositoryLayer.Services
 
         public DbSet<User> User { get; set; }
         public DbSet<Note> Note { get; set; }
+        public DbSet<Collaborator> Collaborator { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -37,4 +39,4 @@ namespace RepositoryLayer.Services
     }
 }
 
-}
+

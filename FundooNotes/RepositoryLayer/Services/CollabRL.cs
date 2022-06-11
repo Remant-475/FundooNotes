@@ -40,7 +40,24 @@ namespace RepositoryLayer.Services
 
                 throw;
             }
+            
+        }
+        public async Task RemoveCollab(int UserId, int NoteId)
+        {
+            try
+            {
+                var collab = fundoocontext.Collaborator.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
+                if (collab != null)
+                {
+                    fundoocontext.Collaborator.Remove(collab);
+                    await fundoocontext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
         }
     }
 }
