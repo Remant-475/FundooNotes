@@ -22,8 +22,7 @@ namespace RepositoryLayer.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int UserId { get; set; }
-        //public virtual User user { get; set; }
-        //public ICollection<User> user { get; set; }
-        //public List<Collaborator> collaborators { get; set; }
+        public virtual ICollection<User> user { get; set; }
+        public virtual List<Collaborator> collaborators { get; set; }
     }
 }

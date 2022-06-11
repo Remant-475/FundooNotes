@@ -153,9 +153,100 @@ namespace FundooNotes.Controllers
 
                 throw;
             }
+        }
+        [Authorize]
+        [HttpDelete("Delete/{NoteId}")]
+        public async Task<ActionResult> RemoveNote(int NoteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userID", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Int32.Parse(userid.Value);
+                var note = fundooContext.Note.FirstOrDefault(e => e.UserId == UserId && e.NoteId == NoteId);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Deletion Failed" });
+                }
+                await this.noteBL.RemoveNote(NoteId, UserId);
+                return this.Ok(new { success = true, message = "Note Deleted Successfully" });
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+
+
+
+        [Authorize]
+        [HttpPut("ReminderNote/{NoteId}")]
+        public async Task<ActionResult> ReminderNote(int NoteId, DateTimeModel dateTimeModel)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userID", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var note = fundooContext.Note.FirstOrDefault(e => e.UserId == userId && e.NoteId == NoteId);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Note Does not Exist " });
+                }
+                await this.noteBL.Reminder(NoteId, userId, dateTimeModel);
+                return this.Ok(new { success = true, message = "Reminder set Successfully" });
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [Authorize]
+        [HttpPut("TrashNote/{NoteId}")]
+        public async Task<ActionResult> TrashNote(int NoteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userID", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Int32.Parse(userid.Value);
+                var note = fundooContext.Note.FirstOrDefault(e => e.UserId == UserId && e.NoteId == NoteId);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Note Does not Exist " });
+                }
+                await this.noteBL.TrashNote(NoteId, UserId);
+                return this.Ok(new { success = true, message = "Note trashed Successfully" });
+            }
+
+
+            catch (Exception)
+            {
+
+                throw;
+            }
 
 
         }
+        [Authorize]
+        [HttpGet("GetallNote")]
+        public async Task<ActionResult> GetallNotes()
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Int32.Parse(userid.Value);
+                List<Note> note = await this.noteBL.GetallNotes(UserId);
+                return this.Ok(new { success = true, message = "Required note is:", data = note });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }
 

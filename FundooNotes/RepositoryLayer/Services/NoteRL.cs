@@ -160,6 +160,108 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-    
+        public async Task TrashNote(int UserId, int NoteId)
+        {
+            try
+            {
+                var note = fundoocontext.Note.FirstOrDefault(u => u.UserId == UserId && u.NoteId == NoteId);
+                if (note != null)
+                {
+                    if (note.IsTrash == false)
+                    {
+                        note.IsTrash = true;
+
+                    }
+                    if (note.IsTrash == true)
+                    {
+                        note.IsTrash = false;
+                    }
+                    await fundoocontext.SaveChangesAsync();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task RemoveNote(int NoteId, int UserId)
+        {
+            try
+            {
+                var note = fundoocontext.Note.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
+                if (note != null)
+                {
+                    fundoocontext.Note.Remove(note);
+                    await fundoocontext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+
+
+        public async Task Reminder(int UserId, int NoteId, DateTimeModel dateTimeModel)
+        {
+            try
+            {
+                var note = fundoocontext.Note.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
+                if (note != null)
+                {
+                    if (note.IsTrash == false)
+                    {
+                        note.IsRemainder = true;
+                        note.Remainder = dateTimeModel.Reminder;
+
+                    }
+                    await fundoocontext.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<Note>> GetallNotes(int UserId)
+        {
+            try
+            {
+                List<Note> result = new List<Note>();
+
+                //return await fundoocontext.Note.Join(fundoocontext.User,
+                //       u => u.NoteId,
+                //       n => n.UserId,
+                //       (u, n) => new NoteResponse
+                //       {
+                //           UserId = u.UserId,
+                //           NoteId = u.NoteId,
+                //           FirstName = n.FirstName,
+                //           LastName = n.LastName,
+                //           Title = u.Title,
+                //           Description = u.Description,
+                //           Colour = u.Colour,
+                //       })
+                //     .Where(un => un.UserId == UserId)
+                //     .Select(un => un.FirstName
+                //     .ToListAsync();
+                result = await fundoocontext.Note.Where(x => x.UserId == UserId).Include(u => u.user).ToListAsync();
+                return result;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
