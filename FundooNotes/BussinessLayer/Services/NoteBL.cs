@@ -86,6 +86,18 @@ namespace BussinessLayer.Services
         {
             await noteRL.Reminder(NoteId, UserId, dateTimeModel);
         }
+        public async Task RemoveNote(int NoteId, int UserId)
+        {
+            try
+            {
+                await this.noteRL.RemoveNote(NoteId, UserId);
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+
+        }
     }
 }
