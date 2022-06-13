@@ -185,5 +185,28 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+        public async Task Reminder(int UserId, int NoteId, DateTimeModel dateTimeModel)
+        {
+            try
+            {
+                var note = fundoocontext.Note.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
+                if (note != null)
+                {
+                    if (note.IsTrash == false)
+                    {
+                        note.IsReminder = true;
+                        note.Reminder = dateTimeModel.Reminder;
+
+                    }
+                    await fundoocontext.SaveChangesAsync();
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
