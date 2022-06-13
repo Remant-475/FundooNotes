@@ -15,14 +15,14 @@ namespace RepositoryLayer.Entities
         public string Description { get; set; }
         public string Colour { get; set; }
         public bool Ispin { get; set; }
-        public bool IsRemainder { get; set; }
+        public bool IsReminder { get; set; }
         public bool IsArchieve { get; set; }
         public bool IsTrash { get; set; }
-        public DateTime Remainder { get; set; }
+        public DateTime Reminder { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        [ForeignKey("User")]
         public int UserId { get; set; }
-        public virtual ICollection<User> user { get; set; }
-        public virtual List<Collaborator> collaborators { get; set; }
+       
     }
 }

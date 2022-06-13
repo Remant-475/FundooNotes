@@ -14,6 +14,7 @@ namespace DataBaseLayer.Users
         [Required]
         [RegularExpression("^[A-Z]{1}[a-z]{3,}$", ErrorMessage = "name starts with Cap and has minimum 3 characters")]
         public string LastName { get; set; }
+        [Required]
         [RegularExpression("^[a-z 0-9]{3,}[@][a-z]{4,}[.][a-z]{3,}$", ErrorMessage = "Please Enter a Valid Email")]
         public string Email { get; set; }
         [Required]

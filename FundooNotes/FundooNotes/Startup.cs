@@ -34,6 +34,9 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
+           
             services.AddControllers();
             services.AddDbContext<FundooContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Constr")));
            
@@ -81,12 +84,16 @@ namespace FundooNotes
 
                 };
             });
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+            });
+
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<INoteRL, NoteRL>();
             services.AddTransient<INoteBL, NoteBL>();
-            services.AddTransient<ICollabRL, CollabRL>();
-            services.AddTransient<ICollabBL, CollabBL>();
+           
 
         }
 

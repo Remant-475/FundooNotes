@@ -31,7 +31,7 @@ namespace RepositoryLayer.Services
                 note.Colour = notePostModel.Colour;
                 note.Ispin = false;
                 note.IsArchieve = false;
-                note.IsRemainder = false;
+                note.IsReminder = false;
                 note.CreatedDate = DateTime.Now;
                 note.ModifiedDate=DateTime.Now;
                 fundoocontext.Add(note);
@@ -112,14 +112,14 @@ namespace RepositoryLayer.Services
                 {
                     if (note.IsTrash == false)
                     {
-                        if (note.Ispin == true)
-                        {
-                            note.Ispin = false;
-
-                        }
                         if (note.Ispin == false)
                         {
                             note.Ispin = true;
+
+                        }
+                        else
+                        {
+                            note.Ispin = false;
                         }
                     }
                     await fundoocontext.SaveChangesAsync();
@@ -141,14 +141,14 @@ namespace RepositoryLayer.Services
                 {
                     if (note.IsTrash == false)
                     {
-                        if (note.IsArchieve == true)
-                        {
-                            note.IsArchieve = false;
-
-                        }
                         if (note.IsArchieve == false)
                         {
                             note.IsArchieve = true;
+
+                        }
+                        else
+                        {
+                            note.IsArchieve = false;
                         }
                     }
                     await fundoocontext.SaveChangesAsync();
@@ -172,70 +172,12 @@ namespace RepositoryLayer.Services
                         note.IsTrash = true;
 
                     }
-                    if (note.IsTrash == true)
+                    else
                     {
                         note.IsTrash = false;
                     }
                     await fundoocontext.SaveChangesAsync();
                 }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task RemoveNote(int NoteId, int UserId)
-        {
-            try
-            {
-                var note = fundoocontext.Note.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
-                if (note != null)
-                {
-                    fundoocontext.Note.Remove(note);
-                    await fundoocontext.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-        }
-        public async Task Reminder(int UserId, int NoteId, DateTimeModel dateTimeModel)
-        {
-            try
-            {
-                var note = fundoocontext.Note.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
-                if (note != null)
-                {
-                    if (note.IsTrash == false)
-                    {
-                        note.IsRemainder = true;
-                        note.Remainder = dateTimeModel.Reminder;
-
-                    }
-                    await fundoocontext.SaveChangesAsync();
-
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-        public async Task<List<Note>> GetallNotes(int UserId)
-        {
-            try
-            {
-                List<Note> result = new List<Note>();
-
-                result = await fundoocontext.Note.Where(x => x.UserId == UserId).Include(u => u.user).ToListAsync();
-                return result;
-
             }
             catch (Exception)
             {
