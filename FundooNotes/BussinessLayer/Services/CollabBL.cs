@@ -40,5 +40,18 @@ namespace BussinessLayer.Services
                 throw ex;
             }
         }
+        public async Task<List<Collaborator>> GetallCollab(int UserId)
+        {
+            try
+            {
+                return await this.collabRL.GetallCollab(UserId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

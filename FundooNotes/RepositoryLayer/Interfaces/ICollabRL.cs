@@ -11,4 +11,6 @@ namespace RepositoryLayer.Interfaces
     {
         Task AddCollab(int UserId, int NoteId, CollabValidation validation);
         Task RemoveCollab(int UserId, int NoteId);
+        Task<List<Collaborator>> GetallCollab(int UserId);
     }
+}
