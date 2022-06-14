@@ -22,12 +22,19 @@ namespace FundooNotes.Controllers
     {
         FundooContext fundooContext;
         INoteBL noteBL;
-       
-        public NoteController(FundooContext fundooContext, INoteBL noteBL)
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+
+
+        public NoteController(FundooContext fundooContext, INoteBL noteBL, IMemoryCache memoryCache, IDistributedCache distributedCache
+)
         {
             this.fundooContext = fundooContext;
             this.noteBL = noteBL;
-           
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
+
+
         }
         [Authorize]
         [HttpPost("AddNote")]
@@ -246,6 +253,38 @@ namespace FundooNotes.Controllers
             catch (Exception)
             {
                 throw;
+            }
+        }
+        [Authorize]
+        [HttpGet("GetAllNotesRedisCache")]
+        public async Task<ActionResult> GetAllNoteByRedisCache()
+        {
+            try
+            {
+                var CacheKey = "NoteList";
+                string serializeNoteList;
+                var noteList = new List<Note>();
+                var redisNoteList = await distributedCache.GetAsync(CacheKey);
+                if (redisNoteList != null)
+                {
+                    serializeNoteList = Encoding.UTF8.GetString(redisNoteList);
+                    noteList = JsonConvert.DeserializeObject<List<Note>>(serializeNoteList);
+                }
+                else
+                {
+                    var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserID", StringComparison.InvariantCultureIgnoreCase));
+                    int UserID = Int32.Parse(userid.Value);
+                    noteList = await this.noteBL.GetallNotes(UserID);
+                    serializeNoteList = JsonConvert.SerializeObject(noteList);
+                    redisNoteList = Encoding.UTF8.GetBytes(serializeNoteList);
+                    var option = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(20)).SetAbsoluteExpiration(TimeSpan.FromHours(6));
+                    await distributedCache.SetAsync(CacheKey, redisNoteList, option);
+                }
+                return this.Ok(new { success = true, message = "Get note successful", data = noteList });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
