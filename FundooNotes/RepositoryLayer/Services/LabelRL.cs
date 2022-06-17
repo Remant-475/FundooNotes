@@ -87,6 +87,21 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+        public async Task<List<Label>> GetallLabel(int UserId)
+        {
+            try
+            {
+                List<Label> label = new List<Label>();
+
+                label = await fundooContext.Label.Where(x => x.UserId == UserId).ToListAsync();
+                return label;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
 
