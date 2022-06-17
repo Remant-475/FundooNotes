@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class Collaborator : Migration
+    public partial class Label : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,19 @@ namespace RepositoryLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Collaborator", x => new { x.UserId, x.NoteId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Label",
+                columns: table => new
+                {
+                    NoteId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LabelName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Label", x => new { x.UserId, x.NoteId });
                 });
 
             migrationBuilder.CreateTable(
@@ -67,6 +80,9 @@ namespace RepositoryLayer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Collaborator");
+
+            migrationBuilder.DropTable(
+                name: "Label");
 
             migrationBuilder.DropTable(
                 name: "Note");

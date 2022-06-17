@@ -24,15 +24,18 @@ namespace RepositoryLayer.Services
         {
             try
             {
-               
-                Collaborator collabrator = new Collaborator
+                var collab = fundoocontext.Collaborator.FirstOrDefault(u => u.NoteId == NoteId && u.UserId == UserId);
+                if (collab != null)
                 {
-                    UserId = UserId,
-                    NoteId = NoteId
-                };
-                collabrator.CollabEmail = validation.CollabEmail;
-                fundoocontext.Add(collabrator);
-                await fundoocontext.SaveChangesAsync();
+                    Collaborator collabrator = new Collaborator
+                    {
+                        UserId = UserId,
+                        NoteId = NoteId
+                    };
+                    collabrator.CollabEmail = validation.CollabEmail;
+                    fundoocontext.Add(collabrator);
+                    await fundoocontext.SaveChangesAsync();
+                }
             }
             catch (Exception)
             {

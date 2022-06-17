@@ -88,7 +88,7 @@ namespace FundooNotes.Controllers
                 int userId = Int32.Parse(userid.Value);
                 var note = fundooContext.Note.FirstOrDefault(e => e.UserId == userId && e.NoteId == NoteId);
                 if (note == null)
-                {
+                 {
                     return this.BadRequest(new { success = false, message = "Note Does not Exist " });
                 }
                 await this.noteBL.UpdateNote(NoteId, userId, updateModel);

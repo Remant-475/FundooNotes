@@ -34,6 +34,17 @@ namespace FundooNotes.Controllers
             {
                 var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Int32.Parse(userid.Value);
+                var note = fundooContext.Note.FirstOrDefault(x => x.UserId == userId && x.NoteId == NoteId);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Sorry! This note does not exist.Please create note" });
+                }
+                var collab = fundooContext.Collaborator.FirstOrDefault(x => x.UserId == userId && x.NoteId == NoteId);
+
+                if(collab != null)
+                {
+                    return this.BadRequest(new { success = false, message = "Collab Email Already Exists, Please Try different Email." });
+                }
                 await this.collabBL.AddCollab(userId, NoteId, validation);
                 return this.Ok(new { success = true, message = $"Collaborator Added Successful" });
 
@@ -52,9 +63,16 @@ namespace FundooNotes.Controllers
             {
                 var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserID", StringComparison.InvariantCultureIgnoreCase));
                 int UserID = Int32.Parse(userid.Value);
-                var note = fundooContext.Collaborator.FirstOrDefault(x => x.UserId == UserID && x.NoteId == NoteId);
+                var note = fundooContext.Note.FirstOrDefault(x => x.UserId == UserID && x.NoteId == NoteId);
                 if (note == null)
+                {
                     return this.BadRequest(new { success = false, message = "Sorry! This note does not exist." });
+                }
+                var collab = fundooContext.Collaborator.FirstOrDefault(e => e.UserId == UserID && e.NoteId == NoteId);
+                if (collab == null)
+                {
+                    return this.BadRequest(new { success = false, message = "CollabEmail Not Added" });
+                }
                 await this.collabBL.RemoveCollab(UserID, NoteId);
                 return this.Ok(new { success = true, message = "Collababorators Removed Successfully" });
             }

@@ -45,14 +45,14 @@ namespace FundooNotes.Controllers
                 var user = fundooContext.User.FirstOrDefault(u => u.Email == Email);
                 if (user == null)
                 {
-                    return this.BadRequest(new { success = false, message = "Email does not Exist" });
+                    return this.BadRequest(new { success = false, message = "Email does not Exist " });
                 }
                 string token = this.userBL.LoginUser(Email, Password);
                 return this.Ok(new { success = true, message = "Login Successful", token = token });
 
             }
             catch (Exception)
-            {
+            { 
 
                 throw;
             }

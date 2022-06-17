@@ -16,7 +16,7 @@ namespace RepositoryLayer.Services
                 client.EnableSsl = true;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = true;
-                client.Credentials = new NetworkCredential("remapitesting963@gmail.com", "Remant@123");
+                client.Credentials = new NetworkCredential("remapitesting963@gmail.com", "yvuplybisfmsdglo");
 
                 var user = fundoocontext.User.FirstOrDefault(u => u.Email == Email);
                 MailMessage msgObj=new MailMessage();

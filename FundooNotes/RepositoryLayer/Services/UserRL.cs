@@ -49,7 +49,7 @@ namespace RepositoryLayer.Services
         {
             try
              {
-                var user = fundoocontext.User.FirstOrDefault(u => u.Email == Email);
+                var user = fundoocontext.User.FirstOrDefault(u => u.Email == Email );
                  Password = Encryption.DecodeFrom64(user.Password);
                 if (user != null)
                 {
@@ -98,7 +98,7 @@ namespace RepositoryLayer.Services
                 messageQueue.Close();
 
                 return true;
-
+ 
 
 
             }
